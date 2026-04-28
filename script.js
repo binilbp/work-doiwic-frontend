@@ -4,24 +4,25 @@ const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
 const clearBtn = document.getElementById('clearBtn');
 const toastEl = document.getElementById('toast');
+const typingTemplate = document.getElementById('typingTemplate');
 
 let isProcessing = false;
 let conversationHistory = [];
 
-// Configure marked
 marked.setOptions({
   breaks: true,
   gfm: true
 });
 
-// Auto-resize textarea
-chatInput.addEventListener('input', () => {
+// Reusable input handler
+function handleInputUpdate() {
   chatInput.style.height = 'auto';
   chatInput.style.height = Math.min(chatInput.scrollHeight, 140) + 'px';
   sendBtn.disabled = chatInput.value.trim() === '' || isProcessing;
-});
+}
 
-// Send on Enter, newline on Shift+Enter
+chatInput.addEventListener('input', handleInputUpdate);
+
 chatInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -35,7 +36,7 @@ sendBtn.addEventListener('click', sendMessage);
 document.querySelectorAll('.suggestion-chip').forEach((chip) => {
   chip.addEventListener('click', () => {
     chatInput.value = chip.dataset.msg;
-    chatInput.dispatchEvent(new Event('input'));
+    handleInputUpdate();
     sendMessage();
   });
 });
@@ -44,9 +45,12 @@ document.querySelectorAll('.suggestion-chip').forEach((chip) => {
 clearBtn.addEventListener('click', () => {
   if (isProcessing) return;
   conversationHistory = [];
-  messagesEl.innerHTML = '';
-  messagesEl.appendChild(emptyState);
-  emptyState.style.display = 'flex';
+  
+  // Cleanly wipe messages and put the empty state back
+  messagesEl.replaceChildren(emptyState); 
+  messagesEl.classList.remove('has-messages'); // Reveal empty state via CSS
+  
+  handleInputUpdate();
   showToast('Conversation cleared');
 });
 
@@ -67,34 +71,32 @@ function escapeHtml(text) {
 }
 
 function appendMessage(role, content, isError) {
-  if (emptyState.style.display !== 'none') {
-    emptyState.style.display = 'none';
-  }
+  messagesEl.classList.add('has-messages'); // Hide empty state via CSS
 
   const msgDiv = document.createElement('div');
   msgDiv.className = `message ${role}`;
 
-  const avatarIcon =
-    role === 'user'
-      ? '<i class="fa-solid fa-user"></i>'
-      : '<i class="fa-solid fa-bolt"></i>';
+  const avatarIcon = role === 'user'
+    ? '<i class="fa-solid fa-user"></i>'
+    : '<i class="fa-solid fa-bolt"></i>';
 
-  let bubbleContent;
+  let contentHtml = escapeHtml(content);
+  let bubbleClass = "msg-bubble";
+
   if (isError) {
-    bubbleContent = `<div class="msg-bubble msg-error">${escapeHtml(content)}</div>`;
+    bubbleClass += " msg-error";
   } else if (role === 'assistant') {
-    // Parse markdown for AI replies
-    const parsedMd = marked.parse(content);
-    bubbleContent = `<div class="msg-bubble md-content">${parsedMd}</div>`;
+    bubbleClass += " md-content";
+    contentHtml = marked.parse(content);
   } else {
-    // Escape HTML for user but preserve newlines
-    bubbleContent = `<div class="msg-bubble">${escapeHtml(content)}</div>`;
+    // Preserve whitespace for user messages
+    msgDiv.style.whiteSpace = 'pre-wrap'; 
   }
 
   msgDiv.innerHTML = `
     <div class="msg-avatar">${avatarIcon}</div>
     <div class="msg-content">
-      ${bubbleContent}
+      <div class="${bubbleClass}">${contentHtml}</div>
       <div class="msg-time">${getTimeString()}</div>
     </div>
   `;
@@ -105,30 +107,9 @@ function appendMessage(role, content, isError) {
 }
 
 function appendTypingIndicator() {
-  if (emptyState.style.display !== 'none') {
-    emptyState.style.display = 'none';
-  }
-
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'message assistant';
-  msgDiv.id = 'typingMsg';
-
-  msgDiv.innerHTML = `
-    <div class="msg-avatar"><i class="fa-solid fa-bolt"></i></div>
-    <div class="msg-content">
-      <div class="msg-bubble">
-        <div class="typing-indicator">
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  messagesEl.appendChild(msgDiv);
+  messagesEl.classList.add('has-messages');
+  messagesEl.appendChild(typingTemplate.content.cloneNode(true));
   scrollToBottom();
-  return msgDiv;
 }
 
 function removeTypingIndicator() {
@@ -149,9 +130,8 @@ async function sendMessage() {
   if (!text || isProcessing) return;
 
   isProcessing = true;
-  sendBtn.disabled = true;
   chatInput.value = '';
-  chatInput.style.height = 'auto';
+  handleInputUpdate();
 
   appendMessage('user', text);
   conversationHistory.push({ role: 'user', content: text });
@@ -186,7 +166,7 @@ async function sendMessage() {
     appendMessage('assistant', errorMsg, true);
   } finally {
     isProcessing = false;
-    sendBtn.disabled = chatInput.value.trim() === '';
+    handleInputUpdate();
     chatInput.focus();
   }
 }
