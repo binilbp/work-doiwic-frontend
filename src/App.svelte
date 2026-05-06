@@ -1,20 +1,19 @@
 <script>
     let nav
     import NavBar from './lib/NavBar.svelte';
-    import ChatCard from './lib/ChatCard.svelte';
     import ClarityBox from './lib/ClarityBox.svelte';
+    import ChatBoard from './lib/ChatBoard.svelte';
     let role = "assistant";
     let content = "hello from ai";
 
 </script>
-<main class="h-screen bg-orange-100"> 
+<main class="h-svh bg-white-100"> 
     <NavBar/>
 
-    <section class="flex justify-center gap-14">
+    <section class="flex justify-center gap-10 py-10">
         <ClarityBox/>
-        <div class=" h-screen bg-slate-100 ">
-            <ChatCard role='user', content='hello from user'/>
-        </div>
+        <div class="h-screen border-dashed border-l-2 border-orange-200 "></div>
+        <ChatBoard/>
         
     </section>
 </main>

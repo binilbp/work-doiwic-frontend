@@ -1,2 +1,4 @@
-<div class="w-md rounded border-4 border-sky-900 h-auto">
+<script>
+</script>
+<div class="w-xs h-90 rounded-xl bg-slate-700 ">
 </div>
