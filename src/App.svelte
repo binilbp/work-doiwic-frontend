@@ -1,19 +1,22 @@
 <script>
-    let nav
-    import NavBar from './lib/NavBar.svelte';
-    import ClarityBox from './lib/ClarityBox.svelte';
-    import ChatBoard from './lib/ChatBoard.svelte';
-    let role = "assistant";
-    let content = "hello from ai";
+    // import NavBar from './lib/NavBar.svelte';
+    // import ClarityBox from './lib/ClarityBox.svelte';
+    // let role = "assistant";
+    import {buttonArray} from './lib/data.svelte.js'
+    import {appState} from './lib/data.svelte.js'
+    import StepsNav from './lib/StepsNav.svelte'
+    import MainPanel from './lib/MainPanel.svelte'
+
 
 </script>
 <main class="h-svh bg-white-100"> 
-    <NavBar/>
 
     <section class="flex justify-center gap-10 py-10">
-        <ClarityBox/>
-        <div class="h-screen border-dashed border-l-2 border-orange-200 "></div>
-        <ChatBoard/>
-        
+        <StepsNav items = {buttonArray} state = {appState} />
+    <!--     <ClarityBox/> -->
+    <!--     <div class="h-screen border-dashed border-l-2 border-orange-200 "></div> -->
+    <!--     <ChatBoard/> -->
+    <!---->
+        <MainPanel state={appState}/>
     </section>
 </main>

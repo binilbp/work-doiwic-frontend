@@ -1,3 +1,9 @@
+export const buttonArray = $state([
+    { label: 'Step 1', onclick: () => alert('Step 1 clicked') },
+    { label: 'Step 2', onclick: () => alert('Step 2 clicked') },
+    { label: 'Step 3', onclick: () => alert('Step 3 clicked') }
+  ]);
+
 
 export const appState = $state({
     chatHistory: [],
