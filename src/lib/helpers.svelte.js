@@ -30,34 +30,18 @@ export function updateUserContext(key, value) {
 
 
 export async function fetchAndSummarize(endpoint, userInput) {
-    if (!userInput.trim()) return;
+    if (!userInput.trim()) return null;
 
-    try {
-        const response = await fetch(`http://localhost:8000/${endpoint}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ prompt: userInput.trim() })
-        });
+    const response = await fetch(`http://localhost:8000/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: userInput.trim() })
+    });
 
-        if (!response.ok) {
-            throw new Error(`Server error on /${endpoint}`);
-        }
-
-        const data = await response.json();
-        
-        // Dynamically grab the correct key from the JSON response.
-        // (Assuming /role returns {"role": "..."}, /context returns {"context": "..."})
-        const summarizedResult = data[endpoint]; 
-
-        updateUserContext(endpoint, summarizedResult);
-        
-        console.log(`Successfully updated ${endpoint}:`, summarizedResult);
-
-    } catch (error) {
-        console.error(`Failed to fetch ${endpoint}:`, error);
-        throw error; 
+    if (!response.ok) {
+        throw new Error("A network or server error occurred.");
     }
+
+    return await response.json(); 
 }
 

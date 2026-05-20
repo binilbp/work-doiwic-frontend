@@ -2,8 +2,7 @@
     // import NavBar from './lib/NavBar.svelte';
     // import ClarityBox from './lib/ClarityBox.svelte';
     // let role = "assistant";
-    import {buttonArray} from './lib/data.svelte.js'
-    import {appState} from './lib/data.svelte.js'
+    import {buttonArray, appState} from './lib/helpers.svelte.js'
     import StepsNav from './lib/StepsNav.svelte'
     import MainPanel from './lib/MainPanel.svelte'
 

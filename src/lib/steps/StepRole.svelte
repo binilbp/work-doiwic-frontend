@@ -1,15 +1,31 @@
 <script>
     import InputBox from '../InputBox.svelte'
-    import { updateUserContext } from '../data.svelte.js'
+    import { updateUserContext, fetchAndSummarize } from '../helpers.svelte.js'
 
     function handleBtnInput(role_selected) {
         updateUserContext("role", role_selected); 
     }
 
-    function getRole(message_to_send) {
-        
-    }
+    let isLoading = $state(false);
+    let errorMessage = $state("");
 
+    async function handleInput(userInput) {
+        isLoading = true;
+        errorMessage = "";
+        try {
+            const data = await fetchAndSummarize("role", userInput);
+            if (data.insufficient_info) {
+                errorMessage = data.reply_text;
+            } else {
+                updateUserContext("role", data.role);
+            }
+
+        } catch (error) {
+            errorMessage = "Please try again. Connection failed"; 
+        } finally {
+            isLoading = false;
+        }    
+    }
 
 </script>
 
@@ -46,5 +62,12 @@
         </button>
     </div>
     
-    <InputBox onSend={getRole} placeholder="Other roles" />
+   <div class="h-8 flex items-center justify-center">
+        {#if isLoading}
+            <p class="text-blue-500 animate-pulse text-sm">AI is thinking...</p>
+        {:else if errorMessage}
+            <p class="text-blue-500 text-md text-center px-4">{errorMessage}</p>
+        {/if}
+    </div> 
+    <InputBox onSend={handleInput} placeholder="Other roles" />
 </div>
