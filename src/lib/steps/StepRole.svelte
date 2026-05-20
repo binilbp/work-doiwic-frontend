@@ -7,21 +7,22 @@
     }
 
     let isLoading = $state(false);
-    let errorMessage = $state("");
+    let displayMessage = $state("");
 
     async function handleInput(userInput) {
         isLoading = true;
-        errorMessage = "";
+        displayMessage = "";
         try {
             const data = await fetchAndSummarize("role", userInput);
             if (data.insufficient_info) {
-                errorMessage = data.reply_text;
+                displayMessage = data.reply_text;
             } else {
                 updateUserContext("role", data.role);
+                displayMessage = `Role set to ${data.role}` ;
             }
 
         } catch (error) {
-            errorMessage = "Please try again. Connection failed"; 
+            displayMessage = "Please try again. Connection failed"; 
         } finally {
             isLoading = false;
         }    
@@ -65,8 +66,8 @@
    <div class="h-8 flex items-center justify-center">
         {#if isLoading}
             <p class="text-blue-500 animate-pulse text-sm">AI is thinking...</p>
-        {:else if errorMessage}
-            <p class="text-blue-500 text-md text-center px-4">{errorMessage}</p>
+        {:else if displayMessage}
+            <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
         {/if}
     </div> 
     <InputBox onSend={handleInput} placeholder="Other roles" />
