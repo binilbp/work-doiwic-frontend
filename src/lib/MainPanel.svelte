@@ -1,6 +1,6 @@
 <script>
     let { state = {} } = $props();
-    import StepRole from './steps/StepRole.svelte'
+    import StepProfile from './steps/StepProfile.svelte'
     import StepContext from './steps/StepContext.svelte'
     import StepGoal from './steps/StepGoal.svelte'
     import StepCurrentPos from './steps/StepCurrentPos.svelte'
@@ -11,7 +11,7 @@
 </script>
 
 {#if state.currentStep === 1}
-    <StepRole/>
+    <StepProfile/>
 
 {:else if state.currentStep === 2}
     <StepContext/>

@@ -3,7 +3,7 @@
     import { updateUserContext, fetchAndSummarize } from '../helpers.svelte.js'
 
     function handleBtnInput(role_selected) {
-        updateUserContext("role", role_selected); 
+        updateUserContext("profile", role_selected); 
     }
 
     let isLoading = $state(false);
@@ -13,12 +13,12 @@
         isLoading = true;
         displayMessage = "";
         try {
-            const data = await fetchAndSummarize("role", userInput);
+            const data = await fetchAndSummarize("profile", userInput);
             if (data.insufficient_info) {
                 displayMessage = data.reply_text;
             } else {
-                updateUserContext("role", data.role);
-                displayMessage = `Role set to ${data.role}` ;
+                updateUserContext("profile", data.profile);
+                displayMessage = `Profile set to ${data.profile}` ;
             }
 
         } catch (error) {
@@ -31,7 +31,7 @@
 </script>
 
 <div class="flex flex-col justify-between items-center">
-    <h2 class="text-xl">Role Page</h2>
+    <h2 class="text-xl">Profile Page</h2>
     
     <div class="flex flex-col justify-between items-center gap-5">
         <button 
@@ -70,5 +70,5 @@
             <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
         {/if}
     </div> 
-    <InputBox onSend={handleInput} placeholder="Other roles" />
+    <InputBox onSend={handleInput} placeholder="I am a ..." />
 </div>

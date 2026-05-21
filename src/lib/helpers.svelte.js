@@ -12,7 +12,7 @@ export const buttonArray = $state([
 export const appState = $state({
     currentStep: 1,
     user_context: {
-        role: "",
+        profile: "",
         context: "",
         position: "",
         resources: "",
@@ -32,16 +32,36 @@ export function updateUserContext(key, value) {
 export async function fetchAndSummarize(endpoint, userInput) {
     if (!userInput.trim()) return null;
 
-    const response = await fetch(`http://localhost:8000/${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input: userInput.trim() })
-    });
+    if (endpoint === "role") {
+        const response = await fetch(`http://localhost:8000/profile`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: userInput.trim() })
+        });
 
-    if (!response.ok) {
-        throw new Error("A network or server error occurred.");
+        if (!response.ok) {
+            throw new Error("A network or server error occurred.");
+        }
+
+        return await response.json(); 
+        console.log("Recieved response");
+
+
+    }
+    else {
+        const response = await fetch(`http://localhost:8000/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: userInput.trim(), user_info: appState.user_context })
+        });
+
+        if (!response.ok) {
+            throw new Error("A network or server error occurred.");
+        }
+
+        return await response.json(); 
+        console.log("Recieved response");
     }
 
-    return await response.json(); 
 }
 
