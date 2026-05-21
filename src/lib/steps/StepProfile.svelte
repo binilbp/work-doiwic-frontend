@@ -1,6 +1,6 @@
 <script>
     import InputBox from '../InputBox.svelte'
-    import { updateUserContext, fetchAndSummarize } from '../helpers.svelte.js'
+    import { updateUserContext, fetchAndSummarize, nextStep } from '../helpers.svelte.js'
 
     function handleBtnInput(role_selected) {
         updateUserContext("profile", role_selected); 
@@ -71,4 +71,12 @@
         {/if}
     </div> 
     <InputBox onSend={handleInput} placeholder="I am a ..." />
+
+    <div clas="flex flex-row justify-between my-2">
+        <button 
+        class="px-4 py-3 rounded-lg text-black border"
+        onclick = {nextStep}>
+            Next
+        </button>
+    </div>
 </div>

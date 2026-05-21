@@ -5,6 +5,7 @@
     import {buttonArray, appState} from './lib/helpers.svelte.js'
     import StepsNav from './lib/StepsNav.svelte'
     import MainPanel from './lib/MainPanel.svelte'
+    import ContextPanel from './lib/ContextPanel.svelte'
 
 
 </script>
@@ -12,10 +13,7 @@
 
     <section class="flex justify-center gap-10 py-10">
         <StepsNav items = {buttonArray} state = {appState} />
-    <!--     <ClarityBox/> -->
-    <!--     <div class="h-screen border-dashed border-l-2 border-orange-200 "></div> -->
-    <!--     <ChatBoard/> -->
-    <!---->
-        <MainPanel state={appState}/>
+        <MainPanel state = {appState}/>
+        <ContextPanel state = {appState} />
     </section>
 </main>

@@ -5,7 +5,6 @@
     import StepCurrentState from './steps/StepCurrentState.svelte'
     import StepResources from './steps/StepResources.svelte'
     import StepConstraints from './steps/StepConstraints.svelte'
-    import StepFriction from './steps/StepFriction.svelte'
     import StepExecution from './steps/StepExecution.svelte'
 </script>
 
@@ -25,13 +24,7 @@
     <StepConstraints/>
 
 {:else if state.currentStep === 6}
-    <StepConstraints/>
-
-{:else if state.currentStep === 7}
-    <StepFriction/>
-
-{:else if state.currentStep === 8}
-    <StepExecution/>
+    <StepExecution appstate = {state}/>
 
 {:else}
     <p class="text-black">Press next to get started</p>
