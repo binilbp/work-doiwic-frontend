@@ -9,12 +9,12 @@
         isLoading = true;
         displayMessage = "";
         try {
-            const data = await fetchAndSummarize("constraints", userInput);
+            const data = await fetchAndSummarize("objectives", userInput);
             if (data.insufficient_info) {
                 displayMessage = data.reply_text;
             } else {
-                updateUserContext("constraints", data.constraints);
-                displayMessage = `Constraints set to ${data.constraints}` ;
+                updateUserContext("objectives", data.objectives);
+                displayMessage = `Objective set to ${data.objectives}` ;
             }
 
         } catch (error) {
@@ -27,8 +27,8 @@
 </script>
 
 <div class="flex flex-col justify-between items-center">
-    <h2 class="text-xl">Constraints Page</h2>
-    <p class="text-md">Please explain your constraints in brief</p>
+    <h2 class="text-xl">Objectives Page</h2>
+    <p class="text-md">Please explain your objective in brief</p>
     
     <div class="h-8 flex items-center justify-center">
         {#if isLoading}
@@ -37,5 +37,5 @@
             <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
         {/if}
     </div> 
-    <InputBox onSend={handleInput} placeholder="I can only ..." />
+    <InputBox onSend={handleInput} placeholder="I want to.." />
 </div>

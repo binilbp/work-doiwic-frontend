@@ -9,12 +9,12 @@
         isLoading = true;
         displayMessage = "";
         try {
-            const data = await fetchAndSummarize("context", userInput);
+            const data = await fetchAndSummarize("current_state", userInput);
             if (data.insufficient_info) {
                 displayMessage = data.reply_text;
             } else {
-                updateUserContext("context", data.context);
-                displayMessage = `Context set to ${data.context}` ;
+                updateUserContext("current_state", data.current_state);
+                displayMessage = `Current State set to ${data.current_state}` ;
             }
 
         } catch (error) {
@@ -27,8 +27,8 @@
 </script>
 
 <div class="flex flex-col justify-between items-center">
-    <h2 class="text-xl">Context Page</h2>
-    <p class="text-md">Please explain you context in brief</p>
+    <h2 class="text-xl">Current State Page</h2>
+    <p class="text-md">Please explain your current state or progress in brief</p>
     
     <div class="h-8 flex items-center justify-center">
         {#if isLoading}
@@ -37,5 +37,5 @@
             <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
         {/if}
     </div> 
-    <InputBox onSend={handleInput} placeholder="my situation is.." />
+    <InputBox onSend={handleInput} placeholder="I want to.." />
 </div>

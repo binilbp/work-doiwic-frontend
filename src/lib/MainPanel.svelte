@@ -1,9 +1,8 @@
 <script>
     let { state = {} } = $props();
     import StepProfile from './steps/StepProfile.svelte'
-    import StepContext from './steps/StepContext.svelte'
-    import StepGoal from './steps/StepGoal.svelte'
-    import StepCurrentPos from './steps/StepCurrentPos.svelte'
+    import StepObjectives from './steps/StepObjectives.svelte'
+    import StepCurrentState from './steps/StepCurrentState.svelte'
     import StepResources from './steps/StepResources.svelte'
     import StepConstraints from './steps/StepConstraints.svelte'
     import StepFriction from './steps/StepFriction.svelte'
@@ -14,16 +13,16 @@
     <StepProfile/>
 
 {:else if state.currentStep === 2}
-    <StepContext/>
+    <StepObjectives/>
 
 {:else if state.currentStep === 3}
-    <StepGoal/>
+    <StepCurrentState/>
 
 {:else if state.currentStep === 4}
-    <StepCurrentPos/>
+    <StepResources/>
 
 {:else if state.currentStep === 5}
-    <StepResources/>
+    <StepConstraints/>
 
 {:else if state.currentStep === 6}
     <StepConstraints/>
