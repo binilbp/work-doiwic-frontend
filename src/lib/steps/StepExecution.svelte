@@ -1,6 +1,10 @@
 <script>
     let { appstate = {} } = $props();
 
+    import { marked } from 'marked';
+    import { onMount } from 'svelte';
+    import DOMPurify from 'dompurify';
+
     import { fetchExecutionPlan, previousStep } from '../helpers.svelte.js'
 
     let isLoading = $state(false);
@@ -23,7 +27,9 @@
         try {
             const data = await fetchExecutionPlan();
             displayMessage = data.reply_text;
-            executionPlan = data.execution_plan;
+            const rawMarkdown = data.execution_plan;
+            const markdown = await marked.parse(rawMarkdown)
+            executionPlan = DOMPurify.sanitize(markdown);
 
         } catch (error) {
             displayMessage = "Please try again. Connection failed"; 
@@ -34,11 +40,11 @@
 
 </script>
 
-<div class="flex flex-col justify-between items-center">
+<div class="flex flex-col items-center justify-center w-full mt-4">
     <h2 class="text-xl">Execution Plan</h2>
     <p class="text-md">Click generate to get the execution plan</p>
     {#if isContextIncomplete}
-        <p> Please complete all other steps</p>
+        <p> Please complete all previous steps first</p>
     {:else }
         <button 
             onclick={generate_plan}
@@ -53,7 +59,7 @@
             <p class="text-blue-500 animate-pulse text-sm">AI is thinking...</p>
         {:else if displayMessage}
             <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
-            <p class="text-blue-500 text-md text-center px-4">{executionPlan}</p>
+            <p class="text-blue-500 text-md text-center px-4">{@html executionPlan}</p>
         {/if}
         
     </div> 
