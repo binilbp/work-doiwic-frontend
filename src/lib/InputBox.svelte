@@ -17,20 +17,20 @@
   }
 </script>
 
-<div class="flex items-end gap-2 px-9 py-4 bg-white border-t border-gray-200">
+<div class="flex w-full flex-col items-stretch gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-3 sm:flex-row sm:items-end">
   <textarea
     bind:value={message}
     {placeholder}
     {disabled}
     onkeydown={handleKeydown}
     rows="1"
-    class="flex-1 resize-none rounded-lg border border-gray-300 px-4 py-3  text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+    class="min-h-12 flex-1 resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm shadow-slate-100 transition focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-100 disabled:opacity-50"
   ></textarea>
   
   <button
     onclick={handleSend}
     disabled={disabled || !message.trim()}
-    class="rounded-lg bg-blue-500 px-4 py-3 text-sm font-medium text-white hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+    class="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-200 transition hover:-translate-y-0.5 hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
   >
     Send
   </button>

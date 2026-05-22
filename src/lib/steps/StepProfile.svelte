@@ -30,51 +30,51 @@
 
 </script>
 
-<div class="flex flex-col justify-between items-center">
-    <h2 class="text-xl">Profile Page</h2>
+<div class="flex min-h-96 w-full flex-col items-center justify-between rounded-3xl border border-white/70 bg-white/80 p-6 text-center shadow-2xl shadow-slate-200/70 backdrop-blur-xl sm:p-10 max-w-xl">
+    <h2 class="text-4xl font-extrabold leading-tight tracking-tight text-slate-950 sm:text-5xl">Profile</h2>
     
-    <div class="flex flex-col justify-between items-center gap-5">
+    <div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
         <button 
             onclick={() => handleBtnInput("Student")}
-            class="rounded-lg px-12 py-3 border text-black"
+            class="rounded-2xl border border-slate-200 bg-white px-10 py-4 font-semibold text-slate-800 shadow-sm shadow-slate-100 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md"
         >
             Student 
         </button>
 
         <button 
             onclick={() => handleBtnInput("Founder")}
-            class="rounded-lg px-12 py-3 border text-black"
+            class="rounded-2xl border border-slate-200 bg-white px-10 py-4 font-semibold text-slate-800 shadow-sm shadow-slate-100 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md"
         >
             Founder 
         </button>
 
         <button 
             onclick={() => handleBtnInput("Leader")}
-            class="rounded-lg px-12 py-3 border text-black"
+            class="rounded-2xl border border-slate-200 bg-white px-10 py-4 font-semibold text-slate-800 shadow-sm shadow-slate-100 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md"
         >
             Leader 
         </button>
 
         <button 
             onclick={() => handleBtnInput("Creator")}
-            class="rounded-lg px-12 py-3 border text-black"
+            class="rounded-2xl border border-slate-200 bg-white px-10 py-4 font-semibold text-slate-800 shadow-sm shadow-slate-100 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md"
         >
             Creator 
         </button>
     </div>
     
-   <div class="h-8 flex items-center justify-center">
+   <div class="flex min-h-8 items-center justify-center">
         {#if isLoading}
-            <p class="text-blue-500 animate-pulse text-sm">AI is thinking...</p>
+            <p class="animate-pulse text-sm font-medium leading-6 text-indigo-600">AI is thinking...</p>
         {:else if displayMessage}
-            <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
+            <p class="px-4 text-center text-sm font-medium leading-6 text-indigo-600">{displayMessage}</p>
         {/if}
     </div> 
     <InputBox onSend={handleInput} placeholder="I am a ..." />
 
-    <div clas="flex flex-row justify-between my-2">
+    <div class="my-2 flex w-full flex-row justify-end">
         <button 
-        class="px-4 py-3 rounded-lg text-black border"
+        class="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-200 transition hover:-translate-y-0.5 hover:bg-indigo-600"
         onclick = {nextStep}>
             Next
         </button>

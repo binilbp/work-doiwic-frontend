@@ -26,26 +26,26 @@
 
 </script>
 
-<div class="flex flex-col justify-between items-center">
-    <h2 class="text-xl">Constraints Page</h2>
-    <p class="text-md">Please explain your constraints in brief</p>
+<div class="flex min-h-96 w-full flex-col items-center justify-between rounded-3xl border border-white/70 bg-white/80 p-6 text-center shadow-2xl shadow-slate-200/70 backdrop-blur-xl sm:p-10 max-w-xl">
+    <h2 class="text-4xl font-extrabold leading-tight tracking-tight text-slate-950 sm:text-5xl">Constraints</h2>
+    <p class="max-w-md text-base leading-7 text-slate-600">Please explain your constraints in brief</p>
     
-    <div class="h-8 flex items-center justify-center">
+    <div class="flex min-h-8 items-center justify-center">
         {#if isLoading}
-            <p class="text-blue-500 animate-pulse text-sm">AI is thinking...</p>
+            <p class="animate-pulse text-sm font-medium leading-6 text-indigo-600">AI is thinking...</p>
         {:else if displayMessage}
-            <p class="text-blue-500 text-md text-center px-4">{displayMessage}</p>
+            <p class="px-4 text-center text-sm font-medium leading-6 text-indigo-600">{displayMessage}</p>
         {/if}
     </div> 
     <InputBox onSend={handleInput} placeholder="I can only ..." />
-    <div clas="flex flex-row justify-between my-2">
+    <div class="my-2 flex w-full flex-row justify-between gap-3">
         <button 
-        class="px-4 py-3 rounded-lg text-black border"
+        class="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
         onclick = {previousStep}>
             Previous
         </button>
         <button 
-        class="px-4 py-3 rounded-lg text-black border"
+        class="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-200 transition hover:-translate-y-0.5 hover:bg-indigo-600"
         onclick = {nextStep}>
             Next
         </button>

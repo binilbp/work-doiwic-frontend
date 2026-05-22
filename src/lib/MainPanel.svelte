@@ -27,5 +27,5 @@
     <StepExecution appstate = {state}/>
 
 {:else}
-    <p class="text-black">Press next to get started</p>
+    <p class="rounded-3xl border border-white/70 bg-white/80 p-8 text-center text-base font-medium leading-7 text-slate-700 shadow-2xl shadow-slate-200/70 backdrop-blur-xl">Press next to get started</p>
 {/if}
