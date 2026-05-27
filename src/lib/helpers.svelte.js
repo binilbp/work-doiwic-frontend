@@ -31,11 +31,13 @@ export const appState = $state({
 export function updateUserContext(key, value) {
     appState.user_context[key] = value;
     console.log("User Context updated -> ",
-        "Profile:", appState.raw_user_input.profile,
-        "Objectives:", appState.raw_user_input.objectives,
-        "Current State:", appState.raw_user_input.current_state,
-        "Resources:", appState.raw_user_input.resources,
-        "Constraints:", appState.raw_user_input.constraints);
+        "Profile:", appState.user_context.profile,
+        "Objectives:", appState.user_context.objectives,
+        "Current State:", appState.user_context.current_state,
+        "Resources:", appState.user_context.resources,
+        "Constraints:", appState.user_context.constraints,
+        "Mental State:", appState.user_context.mental_state,
+    );
 
 };
 
@@ -79,12 +81,12 @@ export async function fetchAndSummarize(endpoint, userInput) {
 
 }
 
-export async function fetchMotivatonClassification() {
+export async function fetchMotivationClassification() {
     console.log("Sending Fetch Request to /motivation");
     const response = await fetch(`http://localhost:8000/motivation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ raw_user_input: appState.raw_user_input })
+        body: JSON.stringify({ user_input: appState.raw_user_input.objectives })
     });
 
     if (!response.ok) {

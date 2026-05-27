@@ -3,7 +3,7 @@
 
     import { marked } from "marked";
     import DOMPurify from "dompurify";
-    import {fetchExecutionPlan, fetchMotivationClassification, updateUserContext, previousStep} from "../helpers.svelte.js";
+    import { fetchExecutionPlan, fetchMotivationClassification, updateUserContext, previousStep } from "../helpers.svelte.js";
 
     let isLoading = $state(false);
     let displayMessage = $state("");
@@ -11,10 +11,10 @@
 
     let isContextIncomplete = $derived(
         !appstate.user_context?.profile ||
-            !appstate.user_context?.objectives ||
-            !appstate.user_context?.current_state ||
-            !appstate.user_context?.resources ||
-            !appstate.user_context?.constraints,
+        !appstate.user_context?.objectives ||
+        !appstate.user_context?.current_state ||
+        !appstate.user_context?.resources ||
+        !appstate.user_context?.constraints,
     );
 
     async function generate_plan() {
@@ -23,20 +23,25 @@
         executionPlan = "";
 
         try {
-            const motivationdata = await fetchMotivationClassification("motivation", "" );
-            mentalState = data.mental_state;
-            updateUserContext("mental_state", mentalState)
+            // Step 1: Fetch and update motivation/mental state
+            const motivationdata = await fetchMotivationClassification("motivation");
+            const mentalState = motivationdata.mental_state; // Fixed: Added 'const'
+            updateUserContext("mental_state", mentalState);
+            console.log("mental state:", { mentalState });
 
+            // Step 2: Fetch and parse the execution plan
             const data = await fetchExecutionPlan();
             displayMessage = data.reply_text;
 
             const rawMarkdown = data.execution_plan;
             const markdown = await marked.parse(rawMarkdown);
             executionPlan = DOMPurify.sanitize(markdown);
+            
         } catch (error) {
-            displayMessage = "Please try again. Connection failed";
+            console.error("Failed to generate plan:", error);
+            displayMessage = "Please try again. Connection failed.";
         } finally {
-            isLoading = false;
+            isLoading = false; // Ensures loading state is cleared whether successful or not
         }
     }
 </script>
@@ -66,7 +71,8 @@
     {:else}
         <button
             onclick={generate_plan}
-            class="rounded-full bg-gradient-to-r from-indigo-500 to-sky-400 px-10 py-3.5 font-bold tracking-wide text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:shadow-xl dark:shadow-none"
+            disabled={isLoading}
+            class="rounded-full bg-gradient-to-r from-indigo-500 to-sky-400 px-10 py-3.5 font-bold tracking-wide text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:shadow-xl dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
         >
             Generate
         </button>
@@ -86,11 +92,13 @@
                 >
                     {displayMessage}
                 </p>
-                <div
-                    class="prose prose-sm sm:prose-base lg:prose-lg prose-slate prose-indigo mx-auto max-h-[500px] w-full max-w-none overflow-y-auto rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 text-left shadow-inner prose-headings:font-bold prose-headings:tracking-tight prose-a:font-semibold dark:prose-invert dark:border-slate-700/50 dark:bg-slate-900/50"
-                >
-                    {@html executionPlan}
-                </div>
+                {#if executionPlan}
+                    <div
+                        class="prose prose-sm sm:prose-base lg:prose-lg prose-slate prose-indigo mx-auto max-h-[500px] w-full max-w-none overflow-y-auto rounded-2xl border border-slate-200/60 bg-slate-50/50 p-6 text-left shadow-inner prose-headings:font-bold prose-headings:tracking-tight prose-a:font-semibold dark:prose-invert dark:border-slate-700/50 dark:bg-slate-900/50"
+                    >
+                        {@html executionPlan}
+                    </div>
+                {/if}
             </div>
         {/if}
     </div>
