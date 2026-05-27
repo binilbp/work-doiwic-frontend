@@ -4,7 +4,8 @@ export const buttonArray = $state([
     { id: ' 3', label:'Current State', onclick: () => appState.currentStep = 3 },
     { id: ' 4', label:'Resources', onclick: () => appState.currentStep = 4 },
     { id: ' 5', label:'Constraints', onclick: () => appState.currentStep = 5 },
-    { id: ' 6', label:'Execution Plan', onclick: () => appState.currentStep = 6 },
+    { id: ' 6', label:'Feelings', onclick: () => appState.currentStep = 6 },
+    { id: ' 7', label:'Execution Plan', onclick: () => appState.currentStep = 7 },
 ]);
 
 export const appState = $state({
@@ -52,7 +53,7 @@ export function updateRawUserInput(key, value) {
 }
 
 export function nextStep() {
-    if (appState.currentStep < 6 ){
+    if (appState.currentStep < 7 ){
         appState.currentStep = appState.currentStep + 1;
     }
 }
@@ -81,12 +82,12 @@ export async function fetchAndSummarize(endpoint, userInput) {
 
 }
 
-export async function fetchMotivationClassification() {
+export async function fetchMotivationClassification(userInput) {
     console.log("Sending Fetch Request to /motivation");
     const response = await fetch(`http://localhost:8000/motivation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input: appState.raw_user_input.objectives })
+        body: JSON.stringify({ user_input: userInput })
     });
 
     if (!response.ok) {

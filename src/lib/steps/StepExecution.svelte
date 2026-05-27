@@ -3,7 +3,7 @@
 
     import { marked } from "marked";
     import DOMPurify from "dompurify";
-    import { fetchExecutionPlan, fetchMotivationClassification, updateUserContext, previousStep } from "../helpers.svelte.js";
+    import { fetchExecutionPlan, updateUserContext, previousStep } from "../helpers.svelte.js";
 
     let isLoading = $state(false);
     let displayMessage = $state("");
@@ -14,7 +14,8 @@
         !appstate.user_context?.objectives ||
         !appstate.user_context?.current_state ||
         !appstate.user_context?.resources ||
-        !appstate.user_context?.constraints,
+        !appstate.user_context?.constraints ||
+        !appstate.user_context?.mental_state,
     );
 
     async function generate_plan() {
@@ -23,13 +24,6 @@
         executionPlan = "";
 
         try {
-            // Step 1: Fetch and update motivation/mental state
-            const motivationdata = await fetchMotivationClassification("motivation");
-            const mentalState = motivationdata.mental_state; // Fixed: Added 'const'
-            updateUserContext("mental_state", mentalState);
-            console.log("mental state:", { mentalState });
-
-            // Step 2: Fetch and parse the execution plan
             const data = await fetchExecutionPlan();
             displayMessage = data.reply_text;
 

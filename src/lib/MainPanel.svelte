@@ -5,6 +5,7 @@
     import StepCurrentState from './steps/StepCurrentState.svelte'
     import StepResources from './steps/StepResources.svelte'
     import StepConstraints from './steps/StepConstraints.svelte'
+    import StepFeelings from './steps/StepFeelings.svelte'
     import StepExecution from './steps/StepExecution.svelte'
 </script>
 
@@ -24,6 +25,9 @@
     <StepConstraints/>
 
 {:else if state.currentStep === 6}
+    <StepFeelings appstate = {state}/>
+
+{:else if state.currentStep === 7}
     <StepExecution appstate = {state}/>
 
 {:else}
