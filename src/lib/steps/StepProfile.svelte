@@ -2,18 +2,21 @@
     import InputBox from "../InputBox.svelte";
     import {
         updateUserContext,
+        updateRawUserInput,
         fetchAndSummarize,
         nextStep,
     } from "../helpers.svelte.js";
 
     function handleBtnInput(role_selected) {
         updateUserContext("profile", role_selected);
+        updateRawUserInput("profile", role_selected);
     }
 
     let isLoading = $state(false);
     let displayMessage = $state("");
 
     async function handleInput(userInput) {
+        updateRawUserInput("profile", userInput); //store the actual raw input
         isLoading = true;
         displayMessage = "";
         try {

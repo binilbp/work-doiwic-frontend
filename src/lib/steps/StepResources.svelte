@@ -2,6 +2,7 @@
     import InputBox from "../InputBox.svelte";
     import {
         updateUserContext,
+        updateRawUserInput,
         fetchAndSummarize,
         nextStep,
         previousStep,
@@ -11,6 +12,7 @@
     let displayMessage = $state("");
 
     async function handleInput(userInput) {
+        updateRawUserInput("resources", userInput); //store the actual raw input
         isLoading = true;
         displayMessage = "";
         try {

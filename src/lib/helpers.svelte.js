@@ -16,6 +16,13 @@ export const appState = $state({
         resources: null,
         constraints: null,
     },
+    raw_user_input: {
+        profile: null,
+        objectives: null,
+        current_state: null,
+        resources: null,
+        constraints: null,
+    }
 });
 
 
@@ -23,8 +30,19 @@ export const appState = $state({
 export function updateUserContext(key, value) {
     appState.user_context[key] = value;
     console.log("User context updated");
-    console.log(appState.user_context);
 };
+
+export function updateRawUserInput(key, value) {
+    appState.user_context[key] = value;
+    console.log("Raw user input updated");
+    console.log(
+        "Profile:", appState.raw_user_input.profile,
+        "Objectives:" appState.raw_user_input.objectives,
+        "Current State:", appState.raw_user_input.current_state,
+        "Resources:", appState.raw_user_input.resources,
+        "Constraints:", appState.raw_user_input.constraints,
+    );
+}
 
 export function nextStep() {
     if (appState.currentStep < 6 ){
@@ -60,7 +78,7 @@ export async function fetchExecutionPlan() {
         const response = await fetch(`http://localhost:8000/execution`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user_info: appState.user_context })
+            body: JSON.stringify({ user_info: appState.user_context, raw_user_input: appState.raw_user_input })
         });
 
         if (!response.ok) {
