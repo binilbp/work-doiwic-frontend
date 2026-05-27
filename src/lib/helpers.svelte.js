@@ -15,6 +15,7 @@ export const appState = $state({
         current_state: null,
         resources: null,
         constraints: null,
+        mental_state: null,
     },
     raw_user_input: {
         profile: null,
@@ -29,19 +30,23 @@ export const appState = $state({
 
 export function updateUserContext(key, value) {
     appState.user_context[key] = value;
-    console.log("User context updated");
+    console.log("User Context updated -> ",
+        "Profile:", appState.raw_user_input.profile,
+        "Objectives:", appState.raw_user_input.objectives,
+        "Current State:", appState.raw_user_input.current_state,
+        "Resources:", appState.raw_user_input.resources,
+        "Constraints:", appState.raw_user_input.constraints);
+
 };
 
 export function updateRawUserInput(key, value) {
-    appState.user_context[key] = value;
-    console.log("Raw user input updated");
-    console.log(
+    appState.raw_user_input[key] = value;
+    console.log("Raw User Input updated -> ",
         "Profile:", appState.raw_user_input.profile,
-        "Objectives:" appState.raw_user_input.objectives,
+        "Objectives:", appState.raw_user_input.objectives,
         "Current State:", appState.raw_user_input.current_state,
         "Resources:", appState.raw_user_input.resources,
-        "Constraints:", appState.raw_user_input.constraints,
-    );
+        "Constraints:", appState.raw_user_input.constraints);
 }
 
 export function nextStep() {
@@ -57,8 +62,8 @@ export function previousStep() {
 }
 
 export async function fetchAndSummarize(endpoint, userInput) {
+    console.log("Sending Fetch Request to /",{endpoint});
     if (!userInput.trim()) return null;
-
     const response = await fetch(`http://localhost:8000/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -72,6 +77,22 @@ export async function fetchAndSummarize(endpoint, userInput) {
     console.log("Recieved response");
     return await response.json(); 
 
+}
+
+export async function fetchMotivatonClassification() {
+    console.log("Sending Fetch Request to /motivation");
+    const response = await fetch(`http://localhost:8000/motivation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ raw_user_input: appState.raw_user_input })
+    });
+
+    if (!response.ok) {
+        throw new Error("A network or server error occurred.");
+    }
+
+    console.log("Recieved response");
+    return await response.json(); 
 }
 
 export async function fetchExecutionPlan() {

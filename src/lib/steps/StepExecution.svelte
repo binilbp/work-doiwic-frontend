@@ -3,7 +3,7 @@
 
     import { marked } from "marked";
     import DOMPurify from "dompurify";
-    import { fetchExecutionPlan, previousStep } from "../helpers.svelte.js";
+    import {fetchExecutionPlan, fetchMotivationClassification, updateUserContext, previousStep} from "../helpers.svelte.js";
 
     let isLoading = $state(false);
     let displayMessage = $state("");
@@ -23,8 +23,13 @@
         executionPlan = "";
 
         try {
+            const motivationdata = await fetchMotivationClassification("motivation", "" );
+            mentalState = data.mental_state;
+            updateUserContext("mental_state", mentalState)
+
             const data = await fetchExecutionPlan();
             displayMessage = data.reply_text;
+
             const rawMarkdown = data.execution_plan;
             const markdown = await marked.parse(rawMarkdown);
             executionPlan = DOMPurify.sanitize(markdown);
